@@ -1,12 +1,13 @@
 const express = require('express')
 const app = express()
-const port = 4000
+const port = 4000 //changed to 4000 as 3000 is hosting another server
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'); //used to connect us to mongoDB (database)
+const path = require('path');
 
-
-app.use(cors());
+//cors
+/*app.use(cors());
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -14,6 +15,10 @@ app.use(function (req, res, next) {
         "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+*/
+//configuration/ where to find build and static folders
+app.use(express.static(path.join(__dirname,'../build')));
+app.use('/static', express.static(path.join(__dirname, 'build/static')));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -21,9 +26,11 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
+//connecting to mongoDB
 const strConnection = 'mongodb+srv://admin:admin@cluster0.hrgmz.mongodb.net/MyFilms?retryWrites=true&w=majority';
 mongoose.connect(strConnection, {useNewUrlParser: true});
 
+//making a schema for database
 const Schema = mongoose.Schema;
 const movieSchema = new Schema({
     Title:String,
@@ -31,12 +38,14 @@ const movieSchema = new Schema({
     Poster:String
 })
 
+//movieModel is what we call now when we want to interact with the database
 const movieModel = mongoose.model('film', movieSchema);
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
+ //find all documents in database
 app.get('/api/movies', (req, res) => {
     
     movieModel.find((err,data)=>{
@@ -66,6 +75,7 @@ app.put('/api/movies/:id',(req,res)=>{
         })
 })
 
+//delete movies
 app.delete('/api/movies/:id', (req, res)=>{
     console.log(req.params.id);
 
@@ -88,6 +98,10 @@ app.post('/api/movies', (req, res) => {
     .catch();
 
     res.send('Data Recieved!');
+})
+
+app.get('*',(req,res)=>{
+    res.sendFile(path.join(__dirname+'/../build/index.html'));
 })
 
 app.listen(port, () => {

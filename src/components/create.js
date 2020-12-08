@@ -3,38 +3,44 @@ import axios from 'axios';
 
 export class Create extends React.Component {
 
+    //using constructor to create form object and super class
     constructor() {
+         //to use forms we need super class and invoke parent class
         super();
 
+        //binding all events to 'this' keyword
         this.onSubmit = this.onSubmit.bind(this);
         this.onChangeTitle = this.onChangeTitle.bind(this);
         this.onChangeYear = this.onChangeYear.bind(this);
         this.onChangePoster = this.onChangePoster.bind(this);
 
+         //fields taken to use in form
         this.state = {
             Title: '',
             Year: '',
             Poster: ''
         }
     }
-
+    //method takes argument e, when we update the input it will display the new Title
     onChangeTitle(e) {
         this.setState({
             Title: e.target.value
         });
     }
-
+    //method takes argument e, new input will update and then display new Year
     onChangeYear(e) {
         this.setState({
             Year: e.target.value
         });
     }
+    //method takes argument e, when input is updated, a new Poster will be displayed
     onChangePoster(e) {
         this.setState({
             Poster: e.target.value
         })
     }
-
+    //onSubmit method, argument taken is e, default prevents us from calling it multiple times
+    //message appears as an alert
     onSubmit(e) {
         e.preventDefault();
         alert("Movie: " + this.state.Title + " "
@@ -52,7 +58,8 @@ export class Create extends React.Component {
         .catch(error => console.log(error));    
 
     }
-
+    //form has a onSubmit button and once clicked it invokes a method
+    //div all holding different inputs on webpage for user, Movie Title, Year, Poster
     render() {
         return (
             <div className='App'>

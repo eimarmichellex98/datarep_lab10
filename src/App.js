@@ -10,7 +10,7 @@ import { Navbar, Nav } from 'react-bootstrap';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Create } from './components/create';
 import { Read } from './components/read';
-import { Edit } from './components/edit';
+import { Edit } from './components/edit'; //importing edit so we can use the path
 
 
 class App extends Component {
